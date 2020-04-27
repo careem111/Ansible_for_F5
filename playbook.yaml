@@ -1,0 +1,20 @@
+---
+- name: Big-IP
+  hosts: bigip
+  connection: local
+  tasks:
+  - name: Collect BIG-IP facts
+    bigip_facts:
+      server: 10.96.0.15
+      user: admin
+      password: jam$vipp
+      validate_certs: no
+      include:
+        - virtual_server
+        - virtual_address
+    register: my_f5
+  - name: save file
+    copy:
+      content: "{{ my_f5 }}"
+      dest: "/root/f5/ansible/f5_2output/vlb1-cust.ams1.jivehosted.com"
+    delegate_to: localhost
